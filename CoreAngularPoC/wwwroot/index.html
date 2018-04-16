@@ -2,14 +2,15 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>CoreAngular PoC</title>
+    <link href="/css/site.css" rel="stylesheet" />
 </head>
 <body>
     <h2> CoreAngular PoC</h2>
-    <div>
+    <div class="productInfo">
         <img src="/images/VanGogh.jpg"/>
         <h3>Mug</h3>
-        <ul>
+        <ul class="product-props">
             <li>Price : 9.99$</li>
             <li>Artist : Van Gogh</li>
             <li>Title : Rainy Day</li>
@@ -18,25 +19,26 @@
         <button>Buy</button>
     </div>
 
-    <form>
-        <label>Your Name:</label>
-        <br />
-        <input />
-        <br />
-        <label>Email:</label>
-        <br />
-        <input type="email" />
-        <br />
-        <label>Subject:</label>
-        <br />
-        <input type="text" />
-        <br />
-        <label>Message:</label>
-        <br />
-        <textarea rows="4"></textarea>
-        <br />
-        <input type="submit" value="Send Message" />
-    </form>
-
+    <div id="formDiv">
+        <form>
+            <label>Your Name:</label>
+            <br />
+            <input />
+            <br />
+            <label>Email:</label>
+            <br />
+            <input type="email" />
+            <br />
+            <label>Subject:</label>
+            <br />
+            <input type="text" />
+            <br />
+            <label>Message:</label>
+            <br />
+            <textarea rows="4"></textarea>
+            <br />
+            <input type="submit" value="Send Message" />
+        </form>
+    </div>
 </body>
 </html>
