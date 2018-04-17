@@ -8,7 +8,7 @@
 <body>
     <h2> CoreAngular PoC</h2>
     <div class="productInfo">
-        <img src="/images/VanGogh.jpg"/>
+        <img src="/images/VanGogh.jpg" />
         <h3>Mug</h3>
         <ul class="product-props">
             <li>Price : 9.99$</li>
@@ -16,7 +16,7 @@
             <li>Title : Rainy Day</li>
             <li>Description : Self-portrait</li>
         </ul>
-        <button>Buy</button>
+        <button id="buyButton">Buy</button>
     </div>
 
     <div id="formDiv">
@@ -40,5 +40,29 @@
             <input type="submit" value="Send Message" />
         </form>
     </div>
+    
+    <div>
+        <div id="loginToggle">Login</div>
+        <form class="popupForm">
+            <div>
+                <label>Username</label>
+                <input />
+            </div>
+            <div>
+                <label>Password</label>
+                <input type="password" />
+            </div>
+            <div>
+                <input type="checkbox" />
+                <label>Remember Me?</label>
+            </div>
+            <div>
+                <input type="submit" value="Login"></input>
+            </div>
+        </form>
+    </div>
+
+    <script src="lib/jQuery/dist/jquery.min.js"></script>
+    <script src="js/index.js"></script>
 </body>
 </html>
