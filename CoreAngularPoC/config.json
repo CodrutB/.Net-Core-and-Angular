@@ -1,0 +1,5 @@
+﻿{
+  "ConnectionStrings": {
+    "CoreConnectionString": "Server=BURDUJOC\\SQLEXPRESS;Database=CoreAngularDb;Integrated Security=true;MultipleActiveResultSets=true;"
+  }
+}
