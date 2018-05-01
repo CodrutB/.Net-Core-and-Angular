@@ -1,4 +1,5 @@
-﻿using CoreAngularPoC.Services;
+﻿using CoreAngularPoC.Data;
+using CoreAngularPoC.Services;
 using CoreAngularPoC.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -7,10 +8,12 @@ namespace CoreAngularPoC.Controllers
     public class AppController : Controller
     {
         private readonly IEmailService _mailServer;
+        private readonly ICoreRepository _repository;
 
-        public AppController(IEmailService mailServer)
+        public AppController(IEmailService mailServer, ICoreRepository repository)
         {
             _mailServer = mailServer;
+            _repository = repository;
         }
 
         public IActionResult Index()
@@ -43,6 +46,13 @@ namespace CoreAngularPoC.Controllers
         {
             ViewBag.Title = "About Us";
             return View();
+        }
+
+        public IActionResult Shop()
+        {
+            var products = _repository.GetAllProducts();
+
+            return View(products);
         }
     }
 }

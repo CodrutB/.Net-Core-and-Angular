@@ -23,7 +23,9 @@ namespace CoreAngularPoC
         {
             services.AddDbContext<CoreContext>(cfg => cfg.UseSqlServer(_config.GetConnectionString("CoreConnectionString")));
             services.AddTransient<IEmailService, DummyEmailService>();
+            services.AddScoped<ICoreRepository, CoreRepository>();
             services.AddMvc();
+            services.AddTransient<Seeder>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,6 +46,15 @@ namespace CoreAngularPoC
             {
                 cfg.MapRoute("Default", "{controller}/{action}/{id?}", new { controller = "App", Action = "Index" });
             });
+
+            if (env.IsDevelopment())
+            {
+                using(var scope = app.ApplicationServices.CreateScope())
+                {
+                    var seeder = scope.ServiceProvider.GetService<Seeder>();
+                    seeder.Seed();
+                }
+            }
         }
     }
 }

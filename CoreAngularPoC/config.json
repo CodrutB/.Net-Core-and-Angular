@@ -1,5 +1,11 @@
 ﻿{
   "ConnectionStrings": {
     "CoreConnectionString": "Server=BURDUJOC\\SQLEXPRESS;Database=CoreAngularDb;Integrated Security=true;MultipleActiveResultSets=true;"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning"
+    }
   }
 }
