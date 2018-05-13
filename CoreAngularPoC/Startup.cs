@@ -1,4 +1,5 @@
-﻿using CoreAngularPoC.Data;
+﻿using AutoMapper;
+using CoreAngularPoC.Data;
 using CoreAngularPoC.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,9 +23,13 @@ namespace CoreAngularPoC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<CoreContext>(cfg => cfg.UseSqlServer(_config.GetConnectionString("CoreConnectionString")));
+
+
+            services.AddAutoMapper();
+
             services.AddTransient<IEmailService, DummyEmailService>();
             services.AddScoped<ICoreRepository, CoreRepository>();
-            services.AddMvc();
+            services.AddMvc().AddJsonOptions(opt => opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
             services.AddTransient<Seeder>();
         }
 

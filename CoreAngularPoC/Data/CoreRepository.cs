@@ -1,4 +1,5 @@
 ﻿using CoreAngularPoC.Data.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,16 @@ namespace CoreAngularPoC.Data
         {
             _context = context;
             _logger = logger;
+        }
+
+        public IEnumerable<Order> GetAllOrders(bool includeItems)
+        {
+            if (includeItems)
+            {
+                return _context.Orders.Include(o => o.Items).ThenInclude(i => i.Product).ToList();
+            }
+
+            return _context.Orders.ToList();
         }
 
         public IEnumerable<Product> GetAllProducts()
@@ -39,6 +50,16 @@ namespace CoreAngularPoC.Data
         public bool SaveAll()
         {
             return _context.SaveChanges() > 0;
+        }
+
+        public Order GetOrderBy(int id)
+        {
+            return _context.Orders.Include(o => o.Items).ThenInclude(i => i.Product).Where(o => o.Id == id).FirstOrDefault();
+        }
+
+        public void AddEntity(object model)
+        {
+            _context.Add(model);
         }
     }
 }

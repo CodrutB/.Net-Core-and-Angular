@@ -8,5 +8,8 @@ namespace CoreAngularPoC.Data
         IEnumerable<Product> GetAllProducts();
         IEnumerable<Product> GetProductsByCategory(string category);
         bool SaveAll();
+        Order GetOrderBy(int id);
+        void AddEntity(object model);
+        IEnumerable<Order> GetAllOrders(bool includeItems);
     }
 }
