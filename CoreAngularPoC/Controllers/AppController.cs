@@ -1,6 +1,7 @@
 ﻿using CoreAngularPoC.Data;
 using CoreAngularPoC.Services;
 using CoreAngularPoC.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoreAngularPoC.Controllers
@@ -48,6 +49,7 @@ namespace CoreAngularPoC.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Shop()
         {
             var products = _repository.GetAllProducts();

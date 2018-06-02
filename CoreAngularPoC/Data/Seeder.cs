@@ -1,10 +1,12 @@
 ﻿using CoreAngularPoC.Data.Entities;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CoreAngularPoC.Data
 {
@@ -12,16 +14,38 @@ namespace CoreAngularPoC.Data
     {
         private readonly CoreContext _context;
         private readonly IHostingEnvironment _hosting;
+        private readonly UserManager<StoreUser> _userManager;
 
-        public Seeder(CoreContext context, IHostingEnvironment hosting)
+        public Seeder(CoreContext context, IHostingEnvironment hosting, UserManager<StoreUser> userManager)
         {
             _context = context;
             _hosting = hosting;
+            _userManager = userManager;
         }
 
-        public void Seed()
+        public async Task Seed()
         {
             _context.Database.EnsureCreated();
+
+            var user = await _userManager.FindByEmailAsync("codrut@yahoo.com");
+
+            if (user == null)
+            {
+                user = new StoreUser
+                {
+                    FirstName = "Codrut",
+                    LastName = "Bur",
+                    UserName = "Codrut",
+                    Email = "codrut@yahoo.com"
+                };
+
+                var result = await _userManager.CreateAsync(user, "P@ssword1!");
+
+                if (result != IdentityResult.Success)
+                {
+                    throw new InvalidOperationException("Failed to create user.");
+                }
+            }
 
             if (!_context.Products.Any())
             {
@@ -36,6 +60,7 @@ namespace CoreAngularPoC.Data
                 {
                     OrderDate = DateTime.Now,
                     OrderNumber = "12345",
+                   // User = user,
                     Items = new List<OrderItem>
                     {
                         new OrderItem
