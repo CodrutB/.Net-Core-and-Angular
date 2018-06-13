@@ -61,5 +61,20 @@ namespace CoreAngularPoC.Data
         {
             _context.Add(model);
         }
+
+        public IEnumerable<Order> GetAllOrdersByUser(string username, bool includeItems)
+        {
+            if (includeItems)
+            {
+                return _context.Orders.Where(o => o.User.UserName == username).Include(o => o.Items).ThenInclude(i => i.Product).ToList();
+            }
+
+            return _context.Orders.Where(o => o.User.UserName == username).ToList();
+        }
+
+        public Order GetOrderBy(string name, int orderId)
+        {
+            return _context.Orders.Include(o => o.Items).ThenInclude(i => i.Product).Where(o => o.Id == orderId && o.User.UserName == name).FirstOrDefault();
+        }
     }
 }

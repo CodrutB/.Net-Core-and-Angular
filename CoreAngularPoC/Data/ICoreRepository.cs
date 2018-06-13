@@ -11,5 +11,7 @@ namespace CoreAngularPoC.Data
         Order GetOrderBy(int id);
         void AddEntity(object model);
         IEnumerable<Order> GetAllOrders(bool includeItems);
+        IEnumerable<Order> GetAllOrdersByUser(string username, bool includeItems);
+        Order GetOrderBy(string name, int orderId);
     }
 }

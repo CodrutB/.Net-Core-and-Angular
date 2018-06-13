@@ -5,6 +5,12 @@ using Microsoft.AspNetCore.Identity;
 using CoreAngularPoC.ViewModels;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
+using System;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.Extensions.Configuration;
 
 namespace CoreAngularPoC.Controllers
 {
@@ -12,11 +18,15 @@ namespace CoreAngularPoC.Controllers
     {
         private readonly ILogger<AccountController> _logger;
         private readonly SignInManager<StoreUser> _signInManager;
+        private readonly UserManager<StoreUser> _userManager;
+        private readonly IConfiguration _config;
 
-        public AccountController(ILogger<AccountController> logger, SignInManager<StoreUser> signInManager)
+        public AccountController(ILogger<AccountController> logger, SignInManager<StoreUser> signInManager, UserManager<StoreUser> userManager, IConfiguration config)
         {
             _logger = logger;
             _signInManager = signInManager;
+            _userManager = userManager;
+            _config = config;
         }
 
         public IActionResult Login()
@@ -55,6 +65,47 @@ namespace CoreAngularPoC.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "App");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateToken([FromBody] LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByNameAsync(model.Username);
+
+                var result = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+
+                if (result.Succeeded)
+                {
+                    var claims = new[]
+                    {
+                        new Claim(JwtRegisteredClaimNames.Sub, user.Email),
+                        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                    };
+
+                    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Tokens:Key"]));
+
+                    var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+                    var token = new JwtSecurityToken(
+                        _config["Tokens:Issuer"],
+                        _config["Tokens:Audience"],
+                        claims,
+                        expires: DateTime.UtcNow.AddMinutes(30),
+                        signingCredentials:creds
+                        );
+
+                    var results = new
+                    {
+                        token = new JwtSecurityTokenHandler().WriteToken(token),
+                        expiration = token.ValidTo
+                    };
+
+                    return Created("", results);
+                }
+            }
+            return BadRequest();
         }
     }
 }

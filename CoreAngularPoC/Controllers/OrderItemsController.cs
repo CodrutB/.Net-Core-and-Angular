@@ -6,6 +6,8 @@ using AutoMapper;
 using CoreAngularPoC.Data;
 using CoreAngularPoC.Data.Entities;
 using CoreAngularPoC.ViewModels;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -14,6 +16,7 @@ namespace CoreAngularPoC.Controllers
 {
     [Produces("application/json")]
     [Route("api/orders/{orderid}/items")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class OrderItemsController : Controller
     {
         private readonly ILogger<ProductsController> _logger;
@@ -32,7 +35,7 @@ namespace CoreAngularPoC.Controllers
         {
             try
             {
-                var order = _repository.GetOrderBy(orderId);
+                var order = _repository.GetOrderBy(User.Identity.Name, orderId);
                 if(order != null)
                 {
                     return Ok(_mapper.Map<IEnumerable<OrderItem>, IEnumerable<OrderItemViewModel>>(order.Items));
@@ -52,7 +55,7 @@ namespace CoreAngularPoC.Controllers
         {
             try
             {
-                var order = _repository.GetOrderBy(orderId);
+                var order = _repository.GetOrderBy(User.Identity.Name, orderId);
                 if (order != null)
                 {
                     var item = order.Items.Where(i => i.Id == id).FirstOrDefault();
