@@ -52,9 +52,7 @@ namespace CoreAngularPoC.Controllers
         [Authorize]
         public IActionResult Shop()
         {
-            var products = _repository.GetAllProducts();
-
-            return View(products);
+            return View();
         }
     }
 }
